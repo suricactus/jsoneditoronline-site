@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jsoneditor</title>
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <link rel="stylesheet" href="./bower_components/jsoneditor/dist/jsoneditor.min.css">
+    <!-- endbuild -->
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <nav class="navbar navbar-default">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">JSON Editor</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+        <form class="navbar-form navbar-left" role="search">
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default active">
+                <input id="je-btn-sync" type="checkbox" autocomplete="off">
+                <i class="glyphicon glyphicon-retweet"></i>
+              </label>
+            </div>
+            <button id="je-btn-code2tree" type="button" class="btn btn-default glyphicon glyphicon-arrow-right"></button>
+            <button id="je-btn-tree2code" type="button" class="btn btn-default glyphicon glyphicon-arrow-left"></button>
+        </form>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" data-toggle="modal" data-target="#je-dlg-new">New</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Open <span class="caret"></span></a>
+            <ul id="je-menu-open" class="dropdown-menu">
+              <li><a href="#" data-toggle="modal" data-target="#je-dlg-open" data-je-tab="je-tab-open-file">From disk</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#je-dlg-open" data-je-tab="je-tab-open-url">From url</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#je-dlg-open" data-je-tab="je-tab-open-saved">Search saved files</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Save <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#" data-toggle="modal" data-target="#je-dlg-save">To disk</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#je-dlg-save">Save online</a></li>
+              <!-- <li><a href="#">Save in browser</a></li> -->
+            </ul>
+          </li>
+        </ul>
+
+      </div><!-- /.navbar-collapse -->
+    </nav>
+    <div class="container-fluid">
+
+      <div class="row">
+
+        <div class="col-md-6 je-editor-container">
+          <div id="je-code"></div>
+        </div>
+
+        <div class="col-md-6 je-editor-container">
+          <div id="je-tree"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="je-dlg-new" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">New JSON document</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to close current JSON and open a new one without saving?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger">New document without saving</button>
+            <button type="button" class="btn btn-primary">Save changes first</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="je-dlg-save" class="modal fade" tabindex="-1" role="dialog">
+      <form id="je-form-save">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Save JSON document</h4>
+          </div>
+          <div class="modal-body">
+
+            <div class="form-group">
+              <label for="je-form-save-input-name">File name</label>
+              <input type="text" name="name" id="je-form-save-input-name" class="form-control"  placeholder="File name">
+            </div>
+<!--             <div class="form-group">
+              <label for="je-form-save-description">Description</label>
+              <textarea type="text" class="form-control" id="je-form-save-description" placeholder="Description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="je-form-save-tags">Tags</label>
+              <input type="text" class="form-control" id="je-form-save-tags" placeholder="Tags">
+            </div> -->
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+    <div id="je-dlg-open" class="modal fade" tabindex="-1" role="dialog">
+      <form>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Open JSON document</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+
+              <!-- Nav tabs -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation"><a href="#je-tab-open-file" aria-controls="je-tab-open-file" role="tab" data-toggle="tab">From disk</a></li>
+                <li role="presentation"><a href="#je-tab-open-url" aria-controls="je-tab-open-url" role="tab" data-toggle="tab">URL</a></li>
+                <li role="presentation"><a href="#je-tab-open-saved" aria-controls="je-tab-open-saved" role="tab" data-toggle="tab">Saved file</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane" id="je-tab-open-file">
+                  <div class="form-group">
+                    <label for="je-form-open-file">JSON file</label>
+                    <input type="file" class="form-control" id="je-form-open-file">
+                  </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="je-tab-open-url">
+                  <div class="form-group">
+                    <label for="je-form-open-url">URL</label>
+                    <input type="text" class="form-control" id="je-form-open-url" placeholder="URL e.g. http://google.com/example.json">
+                  </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="je-tab-open-saved">
+                  <div class="form-group">
+                    <label for="je-form-open-file-name">Search</label>
+                    <input type="text" class="form-control" id="je-form-open-file-name" placeholder="Search">
+                  </div>
+                  <div class="form-group">
+                    <label for="je-form-open-tags">Tags</label>
+                    <input type="text" class="form-control" id="je-form-open-tags" placeholder="Tags">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="./bower_components/jquery/dist/jquery.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/plugins.js -->
+    <script src="./bower_components/bootstrap/js/affix.js"></script>
+    <script src="./bower_components/bootstrap/js/alert.js"></script>
+    <script src="./bower_components/bootstrap/js/dropdown.js"></script>
+    <script src="./bower_components/bootstrap/js/tooltip.js"></script>
+    <script src="./bower_components/bootstrap/js/modal.js"></script>
+    <script src="./bower_components/bootstrap/js/transition.js"></script>
+    <script src="./bower_components/bootstrap/js/button.js"></script>
+    <script src="./bower_components/bootstrap/js/popover.js"></script>
+    <script src="./bower_components/bootstrap/js/carousel.js"></script>
+    <script src="./bower_components/bootstrap/js/scrollspy.js"></script>
+    <script src="./bower_components/bootstrap/js/collapse.js"></script>
+    <script src="./bower_components/bootstrap/js/tab.js"></script>
+    <script src="./bower_components/jsoneditor/dist/jsoneditor.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/main.js -->
+    <script src="scripts/main.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>

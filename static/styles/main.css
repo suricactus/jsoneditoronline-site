@@ -1,0 +1,13 @@
+html, body {
+  forn-size: 10px;
+}
+
+.container-fluid {
+  /*margin-top: 5rem;*/
+}
+
+#je-code, #je-tree {
+  width: 100%;
+  height: 500px;
+}
+
